@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: fct_transactions
+    description: One row per transaction.
+    columns:
+      - name: transaction_id
+        description: Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: account_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_accounts')
+                field: account_id
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id

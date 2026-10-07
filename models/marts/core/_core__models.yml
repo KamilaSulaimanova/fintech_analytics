@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: One row per customer, with account counts rolled up.
+    columns:
+      - name: customer_id
+        description: Primary key.
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_accounts
+    description: One row per account, enriched with owning-customer attributes.
+    columns:
+      - name: account_id
+        description: Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
