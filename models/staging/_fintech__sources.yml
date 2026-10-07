@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: fintech_raw
+    schema: dbt_dev_raw
+    tables:
+      - name: raw_customers
+      - name: raw_accounts
+      - name: raw_transactions
+      - name: raw_merchants

@@ -1,0 +1,11 @@
+merchant_id,merchant_name,merchant_category
+MERCH0001,Whole Foods Market,groceries
+MERCH0002,Amazon,retail
+MERCH0003,Netflix,entertainment
+MERCH0004,Uber,transport
+MERCH0005,Starbucks,dining
+MERCH0006,Delta Airlines,travel
+MERCH0007,CVS Pharmacy,healthcare
+MERCH0008,AT&T,utilities
+MERCH0009,Target,retail
+MERCH0010,DoorDash,dining

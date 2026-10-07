@@ -1,0 +1,97 @@
+version: 2
+
+models:
+  - name: stg_fintech__customers
+    description: One row per customer, cleaned and lightly conformed from the raw source.
+    columns:
+      - name: customer_id
+        description: Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: email
+        tests:
+          - not_null
+      - name: customer_segment
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['retail', 'premium', 'business']
+
+  - name: stg_fintech__merchants
+    description: One row per merchant.
+    columns:
+      - name: merchant_id
+        description: Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: merchant_category
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['groceries', 'retail', 'entertainment', 'transport', 'dining', 'healthcare', 'utilities', 'travel']
+
+  - name: stg_fintech__transactions
+    description: One row per transaction, cleaned and lightly conformed from the raw source.
+    columns:
+      - name: transaction_id
+        description: Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: account_id
+        description: Foreign key to stg_fintech__accounts.account_id.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_fintech__accounts')
+                field: account_id
+      - name: merchant_id
+        description: Foreign key to stg_fintech__merchants.merchant_id.
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_fintech__merchants')
+                field: merchant_id
+      - name: transaction_type
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['purchase', 'deposit', 'withdrawal', 'transfer', 'fee', 'refund']
+      - name: status
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['posted', 'pending', 'failed']
+      - name: amount
+        tests:
+          - not_null
+
+  - name: stg_fintech__accounts
+    description: One row per account, cleaned and lightly conformed from the raw source.
+    columns:
+      - name: account_id
+        description: Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: Foreign key to stg_fintech__customers.customer_id.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_fintech__customers')
+                field: customer_id
+      - name: account_type
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['checking', 'savings', 'credit_card']
+      - name: status
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['active', 'closed', 'frozen']
