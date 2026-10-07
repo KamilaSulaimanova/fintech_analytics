@@ -36,7 +36,7 @@ Run `dbt build` to run every model and test together.
 ```bash
 python3 -m venv venv
 source venv/bin/activate
-pip install dbt-snowflake
+pip install -r requirements.txt
 
 # add your Snowflake credentials to ~/.dbt/profiles.yml (see profiles.yml.example)
 
