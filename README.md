@@ -14,11 +14,23 @@ Synthetic fintech data (no real PII):
 
 ## Architecture
 
+```
+generate_seeds.py          dbt seed             dbt run
+ (synthetic CSVs)   ──►   raw schema   ──►   staging (views)   ──►   intermediate (ephemeral)   ──►   marts (tables)
+                       raw_customers        stg_fintech__customers   int_transactions_enriched      core:
+                       raw_accounts         stg_fintech__accounts                                    dim_customers
+                       raw_transactions     stg_fintech__transactions                                dim_accounts
+                       raw_merchants        stg_fintech__merchants                                 finance:
+                                                                                                     fct_transactions
+                                                                                                     fct_account_running_balance
+                                                                                                     customer_transaction_summary
+```
+
 
 **Design decisions worth noting:**
 
 - **Sources, not raw refs.** Seeds land in a `raw` schema and staging models read them through `source()`, the same way they'd read a Fivetran-loaded table — swapping the seed for a real ingestion pipeline later needs no model changes.
-- **Ephemeral intermediate layer.** `int_transactions_enriched` centralizes the transaction → account → customer → merchant join so every downstream mart that needs it doesn't repeat the same join logic. It's ephemeral because nothing outside the marts needs to query it directly.
+- **Ephemeral intermediate layer.** `int_transactions_enriched` centralizes the transaction → account → customer → merchant join in one place, so it isn't repeated in each model that needs it. It currently feeds `fct_transactions`, and any new transaction-level mart can reuse it. It's ephemeral because nothing outside the marts needs to query it directly.
 - **A running-balance fact table** (`fct_account_running_balance`) built with a window function (`SUM() OVER (PARTITION BY account_id ORDER BY transaction_date)`), filtered to `status = 'posted'` only — a common real-world ledger/balance-reporting pattern.
 - **Environment-aware schema naming.** A custom `generate_schema_name` macro keeps `prod` schemas clean (e.g. `MARTS_FINANCE`) while namespacing every other target under its own schema (e.g. `DBT_DEV_MARTS_FINANCE`) so dev/CI runs never collide.
 
@@ -38,7 +50,8 @@ python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
-# add your Snowflake credentials to ~/.dbt/profiles.yml (see profiles.yml.example)
+# copy the entries from profiles.yml.example into ~/.dbt/profiles.yml
+# (merge them with any existing profiles — do not overwrite the file)
 
 dbt seed
 dbt run

@@ -1,0 +1,23 @@
+fintech_analytics:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: <your_account_identifier>
+      user: <your_username>
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+      role: TRANSFORMER
+      database: FINTECH_ANALYTICS_DEV
+      warehouse: COMPUTE_WH
+      schema: dbt_dev
+      threads: 4
+    prod:
+      type: snowflake
+      account: <your_account_identifier>
+      user: <your_username>
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+      role: TRANSFORMER
+      database: FINTECH_ANALYTICS_PROD
+      warehouse: COMPUTE_WH
+      schema: analytics
+      threads: 4
