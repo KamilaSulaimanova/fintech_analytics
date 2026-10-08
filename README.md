@@ -26,6 +26,7 @@ generate_seeds.py          dbt seed             dbt run
                                                                                                      customer_transaction_summary
 ```
 
+![Lineage graph](docs/lineage.png)
 
 **Design decisions worth noting:**
 
@@ -67,7 +68,8 @@ dbt docs generate && dbt docs serve
 - [x] Staging, intermediate and marts layers with dimensional models
 - [x] Environment-aware schema naming macro (dev vs prod)
 - [x] Generic tests on keys, relationships and enums, plus a singular business-rule test
-- [ ] Generate and host `dbt docs`, with descriptions on every model and column
+- [x] `dbt docs` generated locally, with descriptions on the models
+- [ ] Publish the docs (for example on GitHub Pages) and describe every column
 - [ ] Convert `fct_transactions` to an incremental model as data volume grows
 - [ ] Snapshots to track slowly-changing account status over time
 - [ ] Gap-free daily balances using a date spine
