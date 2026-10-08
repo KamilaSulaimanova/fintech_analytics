@@ -37,7 +37,7 @@ generate_seeds.py          dbt seed             dbt run
 
 ## Testing strategy
 
-- **Generic tests** (`unique`, `not_null`, `accepted_values`, `relationships`) on every primary key, foreign key, and enum-like column — staging through marts.
+- **Generic tests** (`unique`, `not_null`, `accepted_values`, `relationships`) on the primary keys, foreign keys and enum-like columns of the staging layer, dimensions and `fct_transactions`.
 - **A singular test**, `assert_no_activity_after_account_closed`, encoding a real business rule generic tests can't express: no account should have a posted transaction dated after its `closed_date`.
 
 Run `dbt build` to run every model and test together.
@@ -59,8 +59,6 @@ dbt run
 dbt test
 dbt docs generate && dbt docs serve
 ```
-
-## Possible extensions
 
 ## Roadmap
 
