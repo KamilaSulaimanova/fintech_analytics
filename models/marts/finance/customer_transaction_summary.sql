@@ -17,7 +17,7 @@ transactions_rollup as (
     select
         customer_id,
         count(*) as transaction_count,
-        ABS(SUM(CASE WHEN is_debit THEN amount ELSE 0 END)) as total_spent,
+        ABS(SUM(CASE WHEN is_debit THEN amount ELSE 0 END)) as total_outflow,
         SUM(CASE WHEN NOT is_debit THEN amount ELSE 0 END) as total_inflow,
         MIN(transaction_date) as first_transaction_date,
         MAX(transaction_date) as last_transaction_date
@@ -34,7 +34,7 @@ final as (
         c.full_name,
         c.customer_segment,
         coalesce(tr.transaction_count, 0) as transaction_count,
-        coalesce(tr.total_spent, 0) as total_spent,
+        coalesce(tr.total_outflow, 0) as total_outflow,
         coalesce(tr.total_inflow, 0) as total_inflow,
         tr.first_transaction_date,
         tr.last_transaction_date

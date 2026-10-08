@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: fintech_raw
-    schema: dbt_dev_raw
+    schema: "{{ 'raw' if target.name == 'prod' else target.schema ~ '_raw' }}"
     tables:
       - name: raw_customers
       - name: raw_accounts

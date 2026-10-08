@@ -19,7 +19,7 @@ Synthetic fintech data (no real PII):
 
 - **Sources, not raw refs.** Seeds land in a `raw` schema and staging models read them through `source()`, the same way they'd read a Fivetran-loaded table — swapping the seed for a real ingestion pipeline later needs no model changes.
 - **Ephemeral intermediate layer.** `int_transactions_enriched` centralizes the transaction → account → customer → merchant join so every downstream mart that needs it doesn't repeat the same join logic. It's ephemeral because nothing outside the marts needs to query it directly.
-- **A running-balance fact table** (`fct_daily_account_balances`) built with a window function (`SUM() OVER (PARTITION BY account_id ORDER BY transaction_date)`), filtered to `status = 'posted'` only — a common real-world ledger/balance-reporting pattern.
+- **A running-balance fact table** (`fct_account_running_balance`) built with a window function (`SUM() OVER (PARTITION BY account_id ORDER BY transaction_date)`), filtered to `status = 'posted'` only — a common real-world ledger/balance-reporting pattern.
 - **Environment-aware schema naming.** A custom `generate_schema_name` macro keeps `prod` schemas clean (e.g. `MARTS_FINANCE`) while namespacing every other target under its own schema (e.g. `DBT_DEV_MARTS_FINANCE`) so dev/CI runs never collide.
 
 ## Testing strategy
