@@ -23,3 +23,21 @@ models:
               arguments:
                 to: ref('dim_customers')
                 field: customer_id
+
+  - name: fct_account_running_balance
+    description: >
+      Running balance per account. One row per account per day that has posted
+      activity; days without activity have no row.
+    columns:
+      - name: running_balance
+        description: Cumulative sum of posted amounts up to and including this date.
+
+  - name: customer_transaction_summary
+    description: One row per customer with totals over posted transactions only.
+    columns:
+      - name: customer_id
+        description: Primary key.
+      - name: total_outflow
+        description: Absolute sum of all posted debits (purchases, withdrawals, fees, outgoing transfers).
+      - name: total_inflow
+        description: Sum of all posted credits (deposits, refunds, incoming transfers).

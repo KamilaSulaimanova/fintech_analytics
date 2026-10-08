@@ -61,7 +61,15 @@ dbt docs generate && dbt docs serve
 
 ## Possible extensions
 
-- Orchestrate with Airflow: a scheduled DAG running `dbt seed → run → test`
-- Add `snapshots/` to track slowly-changing account `status` over time
-- Convert `fct_transactions` to `incremental` materialization as data volume grows
-- Add CI via GitHub Actions running `dbt build` on every pull request
+## Roadmap
+
+- [x] Synthetic seed data generator with a fixed random seed
+- [x] Staging, intermediate and marts layers with dimensional models
+- [x] Environment-aware schema naming macro (dev vs prod)
+- [x] Generic tests on keys, relationships and enums, plus a singular business-rule test
+- [ ] Generate and host `dbt docs`, with descriptions on every model and column
+- [ ] Convert `fct_transactions` to an incremental model as data volume grows
+- [ ] Snapshots to track slowly-changing account status over time
+- [ ] Gap-free daily balances using a date spine
+- [ ] CI with GitHub Actions running `dbt build` on every pull request
+- [ ] Orchestrate with Airflow: a scheduled DAG running `dbt seed → run → test`

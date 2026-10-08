@@ -1,0 +1,7 @@
+version: 2
+
+models:
+  - name: int_transactions_enriched
+    description: >
+      Transaction-grain model joining transactions to accounts, customers and
+      merchants. Ephemeral; consumed by fct_transactions.
